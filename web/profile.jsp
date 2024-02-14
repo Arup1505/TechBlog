@@ -105,30 +105,30 @@
                 <div class="row mt-4">
                     <div class="col-md-4">
                         <div class="list-group">
-                            <a href="#" class="list-group-item list-group-item-action active">
-                                Categories
+                            <a href="#" onclick="get_posts(0,this)" class="cat-class list-group-item list-group-item-action active">
+                                All Posts
                             </a>
                             <% AddPostDao ad_post = new AddPostDao(ConnectionProvider.createConnection());
                                 ArrayList<Categories> catlist = ad_post.getAllCategorieses();
                                 for (Categories catlist1 : catlist) {
                             %>
-                            <a href="#" class="list-group-item list-group-item-action"><%= catlist1.getcName()%></a>
+                            <a href="#" onclick="get_posts(<%=catlist1.getCatId()%>,this)" class="cat-class list-group-item list-group-item-action"><%= catlist1.getcName()%></a>
                             <%
                                 }
                             %>
                         </div>
                     </div>
 
-                        <div class="col-md-8">
+                    <div class="col-md-8">
                         <!--right side posts-->
                         <div class="container text-center" id="loader">
                             <i class="fa fa-refresh fa-spin fa-3x"></i>
                             <h3 class="mt-2">Loading...</h3>
                         </div>
-                        
-                        
+
+
                         <div class="container-fluid" id="post-colum">
-                            
+
                         </div>
 
                     </div>
@@ -375,15 +375,28 @@
             });
         </script>
         <script>
-            $(document).ready(function (e) {
+            function get_posts(catId,obj){
+                $("#loader").show();
+                $("#post-colum").hide();
+                
+                $(".cat-class").removeClass("active");
+                
+                
                 $.ajax({
                     url: "load_post.jsp",
+                    data: {cid: catId},
                     success: function (data, textStatus, jqXHR) {
                         console.log(data);
                         $("#loader").hide();
+                        $("#post-colum").show();
                         $("#post-colum").html(data);
+                        $(obj).addClass("active");
                     }
                 })
+            }
+            $(document).ready(function (e) {
+                let allpostref=$('.cat-class')[0];
+                get_posts(0,allpostref);
             });
         </script>
 

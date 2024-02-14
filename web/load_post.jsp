@@ -5,8 +5,20 @@
 <div class="row">
 
     <%
+        Thread.sleep(1200);
         AddPostDao po = new AddPostDao(ConnectionProvider.createConnection());
-        List<Post> post = po.getAllPosts();
+        int cid=Integer.parseInt(request.getParameter("cid"));
+        List<Post> post = null;
+        if (cid==0) {
+        post = po.getAllPosts();
+        }
+        else{
+        post=po.getPostByCategories(cid);
+        }
+        if (post.isEmpty()) {
+                out.println("<h3 class='display-3 text-center'>Sorry no posts yet!</h3>");
+                return;
+            }
         for (Post posts : post) {
     %>
 
