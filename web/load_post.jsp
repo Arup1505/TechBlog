@@ -5,7 +5,7 @@
 <div class="row">
 
     <%
-        Thread.sleep(1200);
+        
         AddPostDao po = new AddPostDao(ConnectionProvider.createConnection());
         int cid=Integer.parseInt(request.getParameter("cid"));
         List<Post> post = null;
@@ -29,8 +29,11 @@
             <div class="card-body">
                 <b><%=posts.getpTitle()%></b>
                 <p><%=posts.getpContent()%></p>
-                <code><%=posts.getpCode()%></code>
-
+            </div>
+            <div class="card-footer">
+                <a href="read_post.jsp?posts_id=<%= posts.getpId()%>" class="btn btn-outline-primary btn-sm">Read More...</a>
+                <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-thumbs-o-up"></i><span>11</span></a>
+                <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-commenting-o"></i><span>21</span></a>
             </div>
 
 
