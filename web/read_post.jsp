@@ -1,3 +1,5 @@
+<%@page import="java.text.DateFormat"%>
+<%@page import="arup.dao.UserDao"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="arup.entity.Categories"%>
 <%@page import="arup.entity.Post"%>
@@ -31,6 +33,13 @@
         <style>
             .banner-background{
                 clip-path: polygon(64% 3%, 83% 0, 100% 0, 100% 93%, 80% 90%, 50% 100%, 20% 90%, 0 100%, 0 16%, 31% 16%);
+            }
+        </style>
+        <style>
+            body{
+                background: url(images/abstract-background-278.jpg);
+                background-size: cover;
+                background-attachment: fixed;
             }
         </style>
     </head>
@@ -91,14 +100,27 @@
 
                 <div class="col-md-8 offset-md-2">
 
-                    <div class="card">
+                    <div class="card" style="">
 
-                        <div class="card-header text-center">
+                        <div class="card-header text-center primary-background text-white">
                             <h3><u><%= p.getpTitle()%></u></h3>
 
                         </div>
                         <div class="card-body">
                             <img class="card-img-top" src="post_pic/<%=p.getpPic()%>" alt="Card image cap" height="400">
+                          
+                            <div class="row my-3" style="border: 1px solid brown; padding: 2px ; font-size: 20px">
+                                <div class="col-md-6">
+                                    <%
+                                        UserDao ud = new UserDao(ConnectionProvider.createConnection());
+                                    %>
+                                    <p>Posted by: <a href="#"><%= ud.getPostByUserIdDetils(p.getUser_id()).getName() %></a></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>Posted on:<%= DateFormat.getDateTimeInstance().format(p.getpDate()) %></p>
+                                </div>
+                            </div>
+                                
                             <b> <%=p.getpContent()%></b>
                             <br><!-- comment -->
                             <br>

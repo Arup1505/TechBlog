@@ -35,6 +35,14 @@
                 clip-path: polygon(64% 3%, 83% 0, 100% 0, 100% 93%, 80% 90%, 50% 100%, 20% 90%, 0 100%, 0 16%, 31% 16%);
             }
         </style>
+        <style>
+            body{
+                background: url(images/abstract-background-278.jpg);
+                background-size: cover;
+                background-attachment: fixed;
+            }
+        </style>
+            
     </head>
     <body>
 

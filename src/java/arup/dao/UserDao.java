@@ -82,4 +82,32 @@ public class UserDao {
         
         return f;
     }
+    
+     public Users getPostByUserIdDetils(int userId){
+        Users user = null;
+        
+        String qString = "select * from users where idusers=?";
+        try {
+            PreparedStatement pstm = con.prepareStatement(qString);
+            pstm.setInt(1, userId);
+            ResultSet set = pstm.executeQuery();
+            
+            if (set.next()) {
+                user = new Users();
+                user.setName(set.getString("user_name"));
+                user.setId(set.getInt("idusers"));
+                user.setPassword(set.getString("password"));
+                user.setEmail(set.getString("user_email"));
+                user.setGender(set.getString("gender"));
+                user.setDateTimestamp(set.getTimestamp("reg_date"));
+                user.setAbout(set.getString("abouts"));
+                user.setProfile(set.getString("profile"));
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return user;
+    }
 }
