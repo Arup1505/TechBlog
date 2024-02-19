@@ -36,8 +36,8 @@
                     LikeDao ld = new LikeDao(ConnectionProvider.createConnection());
                 %>
                 <a href="read_post.jsp?posts_id=<%= posts.getpId()%>" class="btn btn-outline-primary btn-sm">Read More...</a>
-                <a href="#" onclick="doLike(<%= posts.getpId() %>,<%= us.getId() %>)" class="btn btn-outline-primary btn-sm"><i class="fa fa-thumbs-o-up"></i><span class="like-counter"><%= ld.countLikes(posts.getpId()) %></span></a>
-                <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-commenting-o"></i><span>21</span></a>
+<!--                <a href="#" onclick="doLike(<%= posts.getpId() %>,<%= us.getId() %>)" class="btn btn-outline-primary btn-sm"><i class="fa fa-thumbs-o-up"></i><span class="like-counter"><%= ld.countLikes(posts.getpId()) %></span></a>
+                <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-commenting-o"></i><span>21</span></a>-->
             </div>
 
 

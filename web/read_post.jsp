@@ -18,6 +18,9 @@
     int pid = Integer.parseInt(request.getParameter("posts_id"));
     AddPostDao addpost = new AddPostDao(ConnectionProvider.createConnection());
     Post p = addpost.getPostsByPostId(pid);
+    
+CommentDao commentDao = new CommentDao(ConnectionProvider.createConnection());
+    
 %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -137,8 +140,8 @@
 
                                 <% LikeDao ld = new LikeDao(ConnectionProvider.createConnection()); %>
                                 
-                                <a href="#" onclick="doLike(<%= p.getpId()%>,<%= user.getId()%>)" class="btn btn-outline-primary btn-sm"><i class="fa fa-thumbs-o-up"></i><span class="like-counter"><%= ld.countLikes(p.getpId()) %></span></a>
-                                <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-commenting-o"></i><span>21</span></a>
+                                <a href="#" onclick="doLike(<%= p.getpId()%>,<%= user.getId()%>)" class="btn btn-outline-primary btn-sm like-btn"><i class="fa <% if(ld.isLikedByUser(p.getpId(), user.getId())) { %> fa-thumbs-up <% } else { %> fa-thumbs-o-up <% } %> "></i><span class="like-counter"><%= ld.countLikes(p.getpId()) %></span></a>
+                                <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-commenting-o"></i><span><%= commentDao.countComments(pid)  %></span></a>
 
                                 <form action="AddComment" id="comment-form">
                                     <textarea class="form-control mt-2" placeholder="Enter your comment here" rows="1" cols="8" name="comment"></textarea>
@@ -153,7 +156,7 @@
                                 <h4>Comments...</h4>
 
                                 <%
-                                    CommentDao commentDao = new CommentDao(ConnectionProvider.createConnection());
+                                    
                                     ArrayList<Comments> comm = commentDao.getAllComments(p.getpId());
                                     UserDao cdao = new UserDao(ConnectionProvider.createConnection());
                                     
@@ -161,7 +164,7 @@
                                     Users cuser = cdao.getPostByUserIdDetils(comments.getIdusers());
                                 %>
                                 <div id="comments-section">
-                                    <div class="container" style="border: 1px solid gold">
+                                    <div class="container my-2" style="border: 1px solid gold">
                                         <h5><%= cuser.getName() %></h5>
                                         <p><%= comments.getcContent()%></p>
                                     </div>

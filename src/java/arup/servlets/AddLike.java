@@ -39,8 +39,13 @@ public class AddLike extends HttpServlet {
             
             LikeDao ld = new LikeDao(ConnectionProvider.createConnection());
             if(operation.equals("like")){
-                boolean f = ld.insertLike(pid, uid);
-                out.println(f);
+                if (ld.isLikedByUser(pid, uid)) {
+                    out.println("already_liked_by_you");
+                }
+                else{
+                    boolean f=ld.insertLike(pid, uid);
+                    out.println(f);
+                }
             }
         }
     }
