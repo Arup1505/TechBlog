@@ -17,6 +17,7 @@ function doLike(pid, uid) {
                 $('.like-counter').html(c);
                 $('.like-btn').addClass('liked');
                 $('.like-btn i').removeClass('fa-thumbs-o-up').addClass('fa-thumbs-up');
+//                $('.like-btn').addClass('liked').html('LIKED'); // Change button text to "LIKED"
                 $('.like-btn').prop('onclick', null).off('click'); // Disable the click event
             }
 //            } else if (data.trim() === "already_liked") {

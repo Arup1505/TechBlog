@@ -18,9 +18,9 @@
     int pid = Integer.parseInt(request.getParameter("posts_id"));
     AddPostDao addpost = new AddPostDao(ConnectionProvider.createConnection());
     Post p = addpost.getPostsByPostId(pid);
-    
-CommentDao commentDao = new CommentDao(ConnectionProvider.createConnection());
-    
+
+    CommentDao commentDao = new CommentDao(ConnectionProvider.createConnection());
+
 %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -138,10 +138,10 @@ CommentDao commentDao = new CommentDao(ConnectionProvider.createConnection());
 
                             <div class="card-footer">
 
-                                <% LikeDao ld = new LikeDao(ConnectionProvider.createConnection()); %>
-                                
-                                <a href="#" onclick="doLike(<%= p.getpId()%>,<%= user.getId()%>)" class="btn btn-outline-primary btn-sm like-btn"><i class="fa <% if(ld.isLikedByUser(p.getpId(), user.getId())) { %> fa-thumbs-up <% } else { %> fa-thumbs-o-up <% } %> "></i><span class="like-counter"><%= ld.countLikes(p.getpId()) %></span></a>
-                                <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-commenting-o"></i><span><%= commentDao.countComments(pid)  %></span></a>
+                                <% LikeDao ld = new LikeDao(ConnectionProvider.createConnection());%>
+
+                                <button onclick="doLike(<%= p.getpId()%>,<%= user.getId()%>)" class="btn btn-outline-primary btn-sm like-btn"><i class="fa <% if (ld.isLikedByUser(p.getpId(), user.getId())) { %> fa-thumbs-up <% } else { %> fa-thumbs-o-up <% }%> "></i><span class="like-counter"><%= ld.countLikes(p.getpId())%></span></button>
+                                <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-commenting-o"></i><span><%= commentDao.countComments(pid)%></span></a>
 
                                 <form action="AddComment" id="comment-form">
                                     <textarea class="form-control mt-2" placeholder="Enter your comment here" rows="1" cols="8" name="comment"></textarea>
@@ -156,16 +156,16 @@ CommentDao commentDao = new CommentDao(ConnectionProvider.createConnection());
                                 <h4>Comments...</h4>
 
                                 <%
-                                    
+
                                     ArrayList<Comments> comm = commentDao.getAllComments(p.getpId());
                                     UserDao cdao = new UserDao(ConnectionProvider.createConnection());
-                                    
+
                                     for (Comments comments : comm) {
-                                    Users cuser = cdao.getPostByUserIdDetils(comments.getIdusers());
+                                        Users cuser = cdao.getPostByUserIdDetils(comments.getIdusers());
                                 %>
                                 <div id="comments-section">
                                     <div class="container my-2" style="border: 1px solid gold">
-                                        <h5><%= cuser.getName() %></h5>
+                                        <h5><%= cuser.getName()%></h5>
                                         <p><%= comments.getcContent()%></p>
                                     </div>
                                 </div>
@@ -452,8 +452,5 @@ CommentDao commentDao = new CommentDao(ConnectionProvider.createConnection());
                     })
                 })
             </script>
-
-
-
     </body>
 </html>
