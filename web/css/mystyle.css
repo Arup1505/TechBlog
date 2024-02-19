@@ -2,3 +2,8 @@
 .primary-background{
 	background: #2979ff
 }
+
+.liked {
+    color: red; /* Change the color of the like icon */
+    pointer-events: none; /* Disable pointer events to prevent further clicks */
+}

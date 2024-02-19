@@ -1,3 +1,6 @@
+<%@page import="arup.entity.Comments"%>
+<%@page import="arup.dao.CommentDao"%>
+<%@page import="arup.dao.LikeDao"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="arup.dao.UserDao"%>
 <%@page import="java.util.ArrayList"%>
@@ -41,7 +44,9 @@
                 background-size: cover;
                 background-attachment: fixed;
             }
+
         </style>
+        <link rel="stylesheet" href="css/mystyle.css"/>
     </head>
     <body>
 
@@ -108,38 +113,70 @@
                         </div>
                         <div class="card-body">
                             <img class="card-img-top" src="post_pic/<%=p.getpPic()%>" alt="Card image cap" height="400">
-                          
+
                             <div class="row my-3" style="border: 1px solid brown; padding: 2px ; font-size: 20px">
                                 <div class="col-md-6">
                                     <%
                                         UserDao ud = new UserDao(ConnectionProvider.createConnection());
                                     %>
-                                    <p>Posted by: <a href="#"><%= ud.getPostByUserIdDetils(p.getUser_id()).getName() %></a></p>
+                                    <p>Posted by: <a href="#"><%= ud.getPostByUserIdDetils(p.getUser_id()).getName()%></a></p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p>Posted on:<%= DateFormat.getDateTimeInstance().format(p.getpDate()) %></p>
+                                    <p>Posted on:<%= DateFormat.getDateTimeInstance().format(p.getpDate())%></p>
                                 </div>
                             </div>
-                                
+
                             <b> <%=p.getpContent()%></b>
                             <br><!-- comment -->
                             <br>
                             <div style="background: cornsilk;font-size: 25px;font-family: sans-serif">
-                                <code><%= p.getpCode() %></code>
+                                <code><%= p.getpCode()%></code>
                             </div>
 
                             <div class="card-footer">
 
-
-                                <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-thumbs-o-up"></i><span>11</span></a>
+                                <% LikeDao ld = new LikeDao(ConnectionProvider.createConnection()); %>
+                                
+                                <a href="#" onclick="doLike(<%= p.getpId()%>,<%= user.getId()%>)" class="btn btn-outline-primary btn-sm"><i class="fa fa-thumbs-o-up"></i><span class="like-counter"><%= ld.countLikes(p.getpId()) %></span></a>
                                 <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-commenting-o"></i><span>21</span></a>
 
+                                <form action="AddComment" id="comment-form">
+                                    <textarea class="form-control mt-2" placeholder="Enter your comment here" rows="1" cols="8" name="comment"></textarea>
+                                    <input type="hidden" name="pid" value="<%= p.getpId()%>">
+                                    <input type="hidden" name="uid" value="<%= user.getId()%>">
+                                    <button type="submit" class="btn btn-warning mt-1"><i class="fa fa-commenting-o"></i></button>
+                                </form>
+
+                            </div>
+                            <div class="card-footer">
+
+                                <h4>Comments...</h4>
+
+                                <%
+                                    CommentDao commentDao = new CommentDao(ConnectionProvider.createConnection());
+                                    ArrayList<Comments> comm = commentDao.getAllComments(p.getpId());
+                                    UserDao cdao = new UserDao(ConnectionProvider.createConnection());
+                                    
+                                    for (Comments comments : comm) {
+                                    Users cuser = cdao.getPostByUserIdDetils(comments.getIdusers());
+                                %>
+                                <div id="comments-section">
+                                    <div class="container" style="border: 1px solid gold">
+                                        <h5><%= cuser.getName() %></h5>
+                                        <p><%= comments.getcContent()%></p>
+                                    </div>
+                                </div>
+                                <%
+                                    }
+                                %>
                             </div>
                         </div>
 
                     </div>
 
-                </div>
+                </div> 
+                <!--end of row-->
+
 
             </div>
 
@@ -325,25 +362,26 @@
                 integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
             <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+            <script src="js/myjs.js"></script>
             <script>
-                $(document).ready(function () {
-                    let editStatus = false;
-                    $('#profile-edit-button').click(function () {
+                                    $(document).ready(function () {
+                                        let editStatus = false;
+                                        $('#profile-edit-button').click(function () {
 
-                        if (editStatus == false) {
-                            $('#profile-table').hide();
-                            $('#profile-edit').show();
-                            editStatus = true;
-                            $(this).text("BACK")
-                        } else {
-                            $('#profile-table').show();
-                            $('#profile-edit').hide();
-                            editStatus = false;
-                            $(this).text("EDIT")
-                        }
+                                            if (editStatus == false) {
+                                                $('#profile-table').hide();
+                                                $('#profile-edit').show();
+                                                editStatus = true;
+                                                $(this).text("BACK")
+                                            } else {
+                                                $('#profile-table').show();
+                                                $('#profile-edit').hide();
+                                                editStatus = false;
+                                                $(this).text("EDIT")
+                                            }
 
-                    });
-                })
+                                        });
+                                    })
             </script>
 
             <script>
@@ -363,7 +401,7 @@
                             data: f,
                             success: function (data, textStatus, jqXHR) {
                                 console.log(data);
-    //                            succss
+                                //                            succss
                                 if (data.trim() == 'Done') {
                                     swal("SAVED!", "your post has been recordeed", "success");
                                 } else {
@@ -381,6 +419,38 @@
                     })
                 });
             </script>
+
+            <!--add comment ajax-->
+            <script>
+                $(document).ready(function () {
+
+                    console.log("page ready");
+
+                    $("#comment-form").on('submit', function (event) {
+                        event.preventDefault();
+                        var f = $(this).serialize();
+                        console.log(f);
+
+                        $.ajax({
+                            url: "AddComment",
+                            data: f,
+                            type: 'POST',
+                            success: function (data, textStatus, jqXHR) {
+                                console.log(data);
+                                $("#comments-section").append("<div class='container' style='border: 1px solid gold'><p>" + data + "</p></div>");
+                                $("#comment-form textarea").val("");
+                                window.location.reload();
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+
+                            }
+
+                        })
+                    })
+                })
+            </script>
+
+
 
     </body>
 </html>

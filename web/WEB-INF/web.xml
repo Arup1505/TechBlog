@@ -20,6 +20,14 @@
         <servlet-name>AddPostServlet</servlet-name>
         <servlet-class>arup.servlets.AddPostServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddComment</servlet-name>
+        <servlet-class>arup.servlets.AddComment</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddLike</servlet-name>
+        <servlet-class>arup.servlets.AddLike</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -39,6 +47,14 @@
     <servlet-mapping>
         <servlet-name>AddPostServlet</servlet-name>
         <url-pattern>/AddPostServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddComment</servlet-name>
+        <url-pattern>/AddComment</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddLike</servlet-name>
+        <url-pattern>/AddLike</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
